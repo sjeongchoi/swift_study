@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var currentNumber: UILabel!
 
     var clickedNumber: Int!
-    var userInput: Bool = false
+    var userTiping: Bool = false
 
     
     override func viewDidLoad() {
@@ -32,8 +32,26 @@ class ViewController: UIViewController {
     }
     
     @IBAction func appendDigit(_ sender: UIButton){
-        let digit = sender.currentTitle
-        currentNumber.text = currentNumber.text! + digit!
+        let digit = sender.currentTitle!
+        if userTiping {
+            let currentNumberInDisplay = currentNumber.text!
+            if digit == "." && currentNumberInDisplay.range(of: ".") != nil {
+                return
+            } else {
+                let tempDigit = currentNumberInDisplay + digit
+                currentNumber.text = tempDigit
+//                currentNumber.text = tempDigit.setMaxLength(of: 8)
+
+            }
+        } else {
+            if digit == "." {
+                currentNumber.text = "0."
+            } else {
+                currentNumber.text = digit
+            }
+            userTiping = true
+        }
+        currentNumber.text = currentNumber.text! + digit
 
     }
     
