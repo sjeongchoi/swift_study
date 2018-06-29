@@ -12,7 +12,10 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var strLabel: UILabel!
     @IBOutlet weak var currentNumber: UILabel!
+
     var clickedNumber: Int!
+    var userInput: Bool = false
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,67 +31,31 @@ class ViewController: UIViewController {
         strLabel.text = "Change the Value"
     }
     
-    @IBAction func numZero(_ sender: Any) {
-        clickedNumber = 0
-        displayCurrentGetNumber()
+    @IBAction func appendDigit(_ sender: UIButton){
+        let digit = sender.currentTitle
+        currentNumber.text = currentNumber.text! + digit!
+
     }
-    @IBAction func numOne(_ sender: Any) {
-        clickedNumber = 1
-        displayCurrentGetNumber()
-    }
-    @IBAction func numTwo(_ sender: Any) {
-        clickedNumber = 2
-        displayCurrentGetNumber()
-    }
-    @IBAction func numThree(_ sender: Any) {
-        clickedNumber = 3
-        displayCurrentGetNumber()
-    }
-    @IBAction func numFour(_ sender: Any) {
-        clickedNumber = 4
-        displayCurrentGetNumber()
-    }
-    @IBAction func numFive(_ sender: Any) {
-        clickedNumber = 5
-        displayCurrentGetNumber()
-    }
-    @IBAction func numSix(_ sender: Any) {
-        clickedNumber = 6
-        displayCurrentGetNumber()
-    }
-    @IBAction func numSeven(_ sender: Any) {
-        clickedNumber = 7
-        displayCurrentGetNumber()
-    }
-    @IBAction func numEight(_ sender: Any) {
-        clickedNumber = 8
-        displayCurrentGetNumber()
-    }
-    @IBAction func numNine(_ sender: Any) {
-        clickedNumber = 9
-        displayCurrentGetNumber()
-    }
-    @IBAction func numDot(_ sender: Any) {
+    
+    @IBAction func getAction(_ sender: UIButton) {
+        let calAction = sender.currentTitle!
         
+        switch calAction {
+            case "AC" : calOperation { $0 * $1 }
+            case "%" : calOperation { $0 * $1 }
+            case "/" : calOperation { $1 / $0 }
+            case "*" : calOperation { $0 * $1 }
+            case "+" : calOperation { $0 + $1 }
+            case "-" : calOperation { $0 * $1 }
+            case "=" : calOperation { $0 * $1 }
+        default : break
+        }
+    }
+    func calOperation(_ resultValue: (Double, Double) -> Double){
+        strLabel.text = "\(resultValue)"
     }
     
-    @IBAction func doCompleteAction(_ sender: Any) {
-    }
-    @IBAction func doPlusActoin(_ sender: Any) {
-    }
-    @IBAction func doMinusAction(_ sender: Any) {
-    }
-    @IBAction func doMultipleAction(_ sender: Any) {
-    }
-    @IBAction func doDivideAction(_ sender: Any) {
-    }
-    @IBAction func doPercentAction(_ sender: Any) {
-    }
-    @IBAction func clearCurrentState(_ sender: Any) {
-    }
-    @IBAction func changePlusMinus(_ sender: Any) {
-    }
-    
+
     func displayCurrentGetNumber() {
         print(clickedNumber)
         currentNumber.text = String(clickedNumber)
