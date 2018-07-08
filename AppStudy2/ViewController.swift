@@ -15,8 +15,20 @@ class ViewController: UIViewController {
 
     var clickedNumber: Int!
     var userTiping: Bool = false
-
+    var hasOperation: Bool = false
+    var isCleared: Bool = true
     
+    var lastNumber: Double = 0
+    
+    enum Operations: String{
+        case Add = "+"
+        case Subtract = "-"
+        case Multiply = "*"
+        case Divide = "/"
+    }
+    
+    var clickedOperation: String!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -33,50 +45,80 @@ class ViewController: UIViewController {
     
     @IBAction func appendDigit(_ sender: UIButton){
         let digit = sender.currentTitle!
-        if userTiping {
-            let currentNumberInDisplay = currentNumber.text!
+        var currentNumberInDisplay : String = ""
+        if currentNumber.text != "0" {
+            currentNumberInDisplay = currentNumber.text!
+        }
+
+        if hasOperation {
+            if clickedOperation == "/" && digit == "0" {
+                currentNumber.text = "ERROR"
+            } else {
+                if digit == "." {
+                    currentNumber.text = "0."
+                } else {
+                    currentNumber.text = digit
+                }
+            }
+            hasOperation = false
+        } else {
             if digit == "." && currentNumberInDisplay.range(of: ".") != nil {
                 return
             } else {
                 let tempDigit = currentNumberInDisplay + digit
                 currentNumber.text = tempDigit
-//                currentNumber.text = tempDigit.setMaxLength(of: 8)
-
             }
-        } else {
-            if digit == "." {
-                currentNumber.text = "0."
-            } else {
-                currentNumber.text = digit
-            }
-            userTiping = true
+            
         }
-        currentNumber.text = currentNumber.text! + digit
 
     }
     
     @IBAction func getAction(_ sender: UIButton) {
-        let calAction = sender.currentTitle!
+        clickedOperation = sender.currentTitle!
         
-        switch calAction {
-            case "AC" : calOperation { $0 * $1 }
-            case "%" : calOperation { $0 * $1 }
-            case "/" : calOperation { $1 / $0 }
-            case "*" : calOperation { $0 * $1 }
-            case "+" : calOperation { $0 + $1 }
-            case "-" : calOperation { $0 * $1 }
-            case "=" : calOperation { $0 * $1 }
+        hasOperation = true
+        if isCleared {
+            lastNumber = Double(currentNumber.text!)!
+            isCleared = false
+        }
+//        let calAction = sender.currentTitle!
+//        switch calAction {
+//            case "%" : calOperation { $0 * $1 }
+//            case "/" : calOperation { $1 / $0 }
+//            case "*" : calOperation { $0 * $1 }
+//            case "+" : calOperation { $0 + $1 }
+//            case "-" : calOperation { $0 * $1 }
+//        default : break
+//        }
+    }
+//    func calOperation(_ resultValue: (Double, Double) -> Double){
+//        print("??????")
+//        strLabel.text = "\(resultValue)"
+//    }
+    @IBAction func clearDisplay(_ sender:UIButton) {
+        currentNumber.text = String(0)
+        lastNumber = 0
+        isCleared = true
+    }
+    @IBAction func completeCalculate(_ sender: UIButton) {
+        let currentValue = Double(currentNumber.text!)!
+        var result: Double = 0
+        
+        switch clickedOperation {
+            case "/" : result = lastNumber / currentValue
+            case "*" : result = lastNumber * currentValue
+            case "+" : result = lastNumber + currentValue
+            case "-" : result = lastNumber - currentValue
         default : break
         }
+        result = Double(round(10000000*result)/10000000)
+        currentNumber.text = String(result)
+        lastNumber = result
     }
-    func calOperation(_ resultValue: (Double, Double) -> Double){
-        strLabel.text = "\(resultValue)"
-    }
-    
 
-    func displayCurrentGetNumber() {
-        print(clickedNumber)
-        currentNumber.text = String(clickedNumber)
-    }
+//    func displayCurrentGetNumber() {
+//        print(clickedNumber)
+//        currentNumber.text = String(clickedNumber)
+//    }
 }
 
